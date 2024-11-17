@@ -41,9 +41,13 @@ module.exports.dataForContest = async (req, res, next) => {
 };
 
 module.exports.getContestById = async (req, res, next) => {
+  const {
+    params: { id },
+  } = req;
+
   try {
     let contestInfo = await db.Contests.findOne({
-      where: { id: req.headers.contestid },
+      where: { id },
       order: [[db.Offers, 'id', 'asc']],
       include: [
         {
@@ -252,10 +256,15 @@ module.exports.setOfferStatus = async (req, res, next) => {
 };
 
 module.exports.getCustomersContests = (req, res, next) => {
+  const {
+    query: { limit, offset, status },
+    tokenData: { userId },
+  } = req;
+
   db.Contests.findAll({
-    where: { status: req.headers.status, userId: req.tokenData.userId },
-    limit: req.body.limit,
-    offset: req.body.offset ? req.body.offset : 0,
+    where: { status, userId },
+    limit,
+    offset: offset ? offset : 0,
     order: [['id', 'DESC']],
     include: [
       {
