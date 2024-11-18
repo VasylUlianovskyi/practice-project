@@ -5,6 +5,8 @@ const userQueries = require('./queries/userQueries');
 const controller = require('../socketInit');
 const UtilFunctions = require('../utils/functions');
 const CONSTANTS = require('../constants');
+const { where } = require('../models/mongoModels/Catalog');
+const { orderBy } = require('lodash');
 
 module.exports.dataForContest = async (req, res, next) => {
   const response = {};
@@ -257,14 +259,14 @@ module.exports.setOfferStatus = async (req, res, next) => {
 
 module.exports.getCustomersContests = (req, res, next) => {
   const {
-    query: { limit, offset, status },
+    query: { limit, offset = 0, contestStatus: status },
     tokenData: { userId },
   } = req;
 
   db.Contests.findAll({
     where: { status, userId },
     limit,
-    offset: offset ? offset : 0,
+    offset,
     order: [['id', 'DESC']],
     include: [
       {
@@ -321,4 +323,26 @@ module.exports.getContests = (req, res, next) => {
     .catch(err => {
       next(new ServerError());
     });
+};
+
+module.exports.getOffers = async (req, res, next) => {
+  const {
+    query: { limit = 8, offset = 0 },
+  } = req;
+
+  try {
+    const foundOffers = await db.Offers.findAll({
+      where: { status: CONSTANTS.OFFER_STATUS_WON },
+      attributes: ['text', 'fileName'],
+      limit,
+      offset,
+      order: [['id', 'ASC']],
+      raw: true,
+    });
+
+    const haveMore = foundOffers.length > 0;
+    res.send({ foundOffers, haveMore });
+  } catch (err) {
+    next(new ServerError(err));
+  }
 };
