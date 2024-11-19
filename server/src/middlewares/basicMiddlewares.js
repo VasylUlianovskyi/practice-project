@@ -51,11 +51,17 @@ module.exports.canGetContest = async (req, res, next) => {
 };
 
 module.exports.onlyForCreative = (req, res, next) => {
-  if (req.tokenData.role === CONSTANTS.CUSTOMER) {
-    next(new RightsError());
-  } else {
-    next();
+  if (!req.tokenData) {
+    return res
+      .status(401)
+      .send({ error: 'Token Error', message: 'No token data provided' });
   }
+
+  if (req.tokenData.role === CONSTANTS.CUSTOMER) {
+    return next(new RightsError());
+  }
+
+  next();
 };
 
 module.exports.onlyForCustomer = (req, res, next) => {

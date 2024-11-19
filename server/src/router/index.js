@@ -23,17 +23,13 @@ router.post('/getUser', checkToken.checkAuth);
 
 router.get('/offers', contestController.getOffers);
 
+router.get('/contests', contestController.getContests);
+
 router.use(checkToken.checkToken);
 
 router.use('/contests', contestRouter);
 
 router.post('/dataForContest', contestController.dataForContest);
-
-router.post(
-  '/getAllContests',
-  basicMiddlewares.onlyForCreative,
-  contestController.getContests
-);
 
 router.get('/downloadFile/:fileName', contestController.downloadFile);
 
