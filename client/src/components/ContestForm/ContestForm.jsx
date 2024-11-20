@@ -61,6 +61,32 @@ class ContestForm extends React.Component {
     }
   }
 
+  handleSubmit = values => {
+    const formData = new FormData();
+
+    Object.keys(values).forEach(key => {
+      if (Array.isArray(values[key])) {
+        values[key].forEach((item, index) => {
+          formData.append(`${key}[${index}]`, item);
+        });
+      } else {
+        formData.append(key, values[key]);
+      }
+    });
+
+    fetch('/updateContest', {
+      method: 'PUT',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
+
   render () {
     const { isFetching, error } = this.props.dataForContest;
     if (error) {

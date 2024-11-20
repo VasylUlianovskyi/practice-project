@@ -104,17 +104,25 @@ module.exports.downloadFile = async (req, res, next) => {
 };
 
 module.exports.updateContest = async (req, res, next) => {
-  if (req.file) {
-    req.body.fileName = req.file.filename;
-    req.body.originalFileName = req.file.originalname;
-  }
-  const contestId = req.body.contestId;
-  delete req.body.contestId;
   try {
-    const updatedContest = await contestQueries.updateContest(req.body, {
+    const { contestId, file, ...contestData } = req.body;
+    const { tokenData } = req;
+    if (!tokenData || !tokenData.userId) {
+      return res
+        .status(400)
+        .send('User not authenticated or token data missing');
+    }
+
+    if (file) {
+      contestData.fileName = file.filename;
+      contestData.originalFileName = file.originalname;
+    }
+
+    const updatedContest = await contestQueries.updateContest(contestData, {
       id: contestId,
-      userId: req.tokenData.userId,
+      userId: tokenData.userId,
     });
+
     res.send(updatedContest);
   } catch (e) {
     next(e);

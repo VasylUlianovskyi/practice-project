@@ -27,14 +27,18 @@ module.exports.checkAuth = async (req, res, next) => {
 };
 
 module.exports.checkToken = async (req, res, next) => {
+  console.log('Request Headers:', req.headers);
+
   const accessToken = req.headers.authorization;
-  if (!accessToken) {
-    return next(new TokenError('need token'));
+  if (!accessToken || !accessToken.startsWith('Bearer ')) {
+    return next(new TokenError('Authorization token is missing or malformed'));
   }
+
+  const token = accessToken.split(' ')[1];
   try {
-    req.tokenData = jwt.verify(accessToken, CONSTANTS.JWT_SECRET);
+    req.tokenData = jwt.verify(token, CONSTANTS.JWT_SECRET);
     next();
   } catch (err) {
-    next(new TokenError());
+    next(new TokenError('Invalid or expired token'));
   }
 };

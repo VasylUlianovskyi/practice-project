@@ -33,7 +33,7 @@ router.post('/dataForContest', contestController.dataForContest);
 
 router.get('/downloadFile/:fileName', contestController.downloadFile);
 
-router.post(
+router.put(
   '/updateContest',
   upload.updateContestFile,
   contestController.updateContest
