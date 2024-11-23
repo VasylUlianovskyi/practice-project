@@ -1,7 +1,7 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up (queryInterface, Sequelize) {
+  up: (queryInterface, Sequelize) => {
     return queryInterface
       .createTable('Transactions', {
         id: {
