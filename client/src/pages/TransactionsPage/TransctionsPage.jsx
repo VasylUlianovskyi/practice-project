@@ -2,8 +2,15 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { format } from 'date-fns';
 import { getTransactionsThunk } from '../../store/slices/transactionsSlice';
+import Spinner from '../../components/Spinner/Spinner';
+import TryAgain from './../../components/TryAgain/TryAgain';
 
-function TransactionsPage ({ getTransactions, transactions }) {
+function TransactionsPage ({
+  getTransactions,
+  transactions,
+  isFetching,
+  error,
+}) {
   useEffect(() => {
     getTransactions();
   }, []);
@@ -13,35 +20,44 @@ function TransactionsPage ({ getTransactions, transactions }) {
   return (
     <>
       <h2>Your Transactions</h2>
-      <table>
-        <caption>Transactions</caption>
-        <thead>
-          <tr>
-            <th key={1}>#</th>
-            <th key={2}>Amount</th>
-            <th key={3}>Type</th>
-            <th key={4}>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((t, i) => (
-            <tr key={t.id}>
-              <td key={1}>{i + 1}</td>
-              <td key={2}>{t.amount}</td>
-              <td key={3}>{t.operationType}</td>
-              <td key={4}>
-                {format(new Date(t.createdAt), 'yyyy/MM/dd HH:mm')}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Total:</th>
-            <td colSpan={3}>{total}</td>
-          </tr>
-        </tfoot>
-      </table>
+      {isFetching && <Spinner />}
+      {error && <TryAgain getData={getTransactions} />}
+      {/* TODO move tavle to single component */}
+      {!isFetching &&
+        !error &&
+        (transactions.length === 0 ? (
+          <div>You have no transactions yet</div>
+        ) : (
+          <table>
+            <caption>Transactions</caption>
+            <thead>
+              <tr>
+                <th key={1}>#</th>
+                <th key={2}>Amount</th>
+                <th key={3}>Type</th>
+                <th key={4}>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transactions.map((t, i) => (
+                <tr key={t.id}>
+                  <td key={1}>{i + 1}</td>
+                  <td key={2}>{t.amount}</td>
+                  <td key={3}>{t.operationType}</td>
+                  <td key={4}>
+                    {format(new Date(t.createdAt), 'yyyy/MM/dd HH:mm')}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Total:</th>
+                <td colSpan={3}>{total}</td>
+              </tr>
+            </tfoot>
+          </table>
+        ))}
     </>
   );
 }
