@@ -1,0 +1,2 @@
+GET http://localhost:5000/users/id/transactions?limit=8&offset=0
+Authorization: 
