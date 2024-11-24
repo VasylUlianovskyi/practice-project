@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { format } from 'date-fns';
 import { getTransactionsThunk } from '../../store/slices/transactionsSlice';
 
 function TransactionsPage ({ getTransactions, transactions }) {
   useEffect(() => {
     getTransactions();
-  });
-  const total = transactions.reduce((accum, t) => accum + t.amount, 0);
+  }, []);
+
+  const total = transactions.reduce((accum, t) => accum + Number(t.amount), 0);
 
   return (
     <>
@@ -27,7 +29,9 @@ function TransactionsPage ({ getTransactions, transactions }) {
               <td key={1}>{i + 1}</td>
               <td key={2}>{t.amount}</td>
               <td key={3}>{t.operationType}</td>
-              <td key={4}>{t.createdAt}</td>
+              <td key={4}>
+                {format(new Date(t.createdAt), 'yyyy/MM/dd HH:mm')}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -43,6 +47,7 @@ function TransactionsPage ({ getTransactions, transactions }) {
 }
 
 const mapStateToProps = state => state.transactionsStore;
+
 const mapDispatchToProps = dispatch => ({
   getTransactions: () => dispatch(getTransactionsThunk()),
 });
