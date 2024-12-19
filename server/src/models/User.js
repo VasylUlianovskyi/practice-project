@@ -1,3 +1,5 @@
+const { subYears } = require('date-fns');
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'Users',
@@ -28,6 +30,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+      },
+      birthday: {
+        type: DataTypes.DATEONLY,
+        validate: {
+          isBefore: subYears(
+            new Date().setHours(24, 0, 0, 0),
+            18
+          ).toISOString(),
+        },
       },
       avatar: {
         type: DataTypes.STRING,

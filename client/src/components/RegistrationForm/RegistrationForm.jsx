@@ -16,15 +16,20 @@ class RegistrationForm extends React.Component {
   }
 
   clicked = values => {
+    const data = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      displayName: values.displayName,
+      email: values.email,
+      password: values.password,
+      role: values.role,
+    };
+
+    if (values.birthday) {
+      data.birthday = values.birthday;
+    }
     this.props.register({
-      data: {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        displayName: values.displayName,
-        email: values.email,
-        password: values.password,
-        role: values.role,
-      },
+      data,
       navigate: this.props.navigate,
     });
   };
@@ -60,6 +65,7 @@ class RegistrationForm extends React.Component {
             email: '',
             password: '',
             confirmPassword: '',
+            birthday: '',
             role: CONSTANTS.CUSTOMER,
             agreeOfTerms: false,
           }}
@@ -107,6 +113,14 @@ class RegistrationForm extends React.Component {
                 classes={formInputClasses}
                 type='password'
                 label='Password confirmation'
+              />
+            </div>
+            <div className={styles.row}>
+              <FormInput
+                name='birthday'
+                classes={formInputClasses}
+                type='date'
+                label='Birthday'
               />
             </div>
             <div className={styles.choseRoleContainer}>

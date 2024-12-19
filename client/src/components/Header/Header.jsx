@@ -7,6 +7,7 @@ import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
 import withRouter from '../../hocs/withRouter';
 import Logo from '../Logo';
+import Congrats from './Congrats/Congrats';
 
 const { TEL } = CONSTANTS.CONTACTS;
 
@@ -89,6 +90,7 @@ class Header extends React.Component {
             className={styles.emailIcon}
             alt='email'
           />
+          <Congrats birthday={this.props.data.birthday} />
         </>
       );
     }

@@ -13,6 +13,7 @@ const UserInfo = props => {
     formData.append('firstName', values.firstName);
     formData.append('lastName', values.lastName);
     formData.append('displayName', values.displayName);
+    formData.append('birthday', values.birthday);
     props.updateUser(formData);
   };
 
@@ -25,6 +26,7 @@ const UserInfo = props => {
     email,
     role,
     balance,
+    birthday,
   } = data;
   return (
     <div className={styles.mainContainer}>
@@ -62,6 +64,12 @@ const UserInfo = props => {
               <span className={styles.label}>Role</span>
               <span className={styles.info}>{role}</span>
             </div>
+            {birthday && (
+              <div className={styles.infoBlock}>
+                <span className={styles.label}>Birthday</span>
+                <span className={styles.info}>{birthday}</span>
+              </div>
+            )}
             {role === CONSTANTS.CREATOR && (
               <div className={styles.infoBlock}>
                 <span className={styles.label}>Balance</span>

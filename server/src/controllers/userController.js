@@ -21,6 +21,7 @@ module.exports.login = async (req, res, next) => {
         lastName: foundUser.lastName,
         avatar: foundUser.avatar,
         displayName: foundUser.displayName,
+        birthday: foundUser.birthday,
         balance: foundUser.balance,
         email: foundUser.email,
         rating: foundUser.rating,
@@ -48,6 +49,7 @@ module.exports.registration = async (req, res, next) => {
         avatar: newUser.avatar,
         displayName: newUser.displayName,
         balance: newUser.balance,
+        birthday: newUser.birthday,
         email: newUser.email,
         rating: newUser.rating,
       },
@@ -203,6 +205,7 @@ module.exports.updateUser = async (req, res, next) => {
       avatar: updatedUser.avatar,
       email: updatedUser.email,
       balance: updatedUser.balance,
+      birthday: updatedUser.birthday,
       role: updatedUser.role,
       id: updatedUser.id,
     });

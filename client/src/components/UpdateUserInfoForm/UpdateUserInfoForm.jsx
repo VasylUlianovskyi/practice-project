@@ -66,6 +66,20 @@ const UpdateUserInfoForm = props => {
             }}
           />
         </div>
+        <div className={styles.container}>
+          <span className={styles.label}>Birthday</span>
+          <FormInput
+            name='birthday'
+            type='date'
+            label='Birthday'
+            classes={{
+              container: styles.inputContainer,
+              input: styles.input,
+              warning: styles.error,
+              notValid: styles.notValid,
+            }}
+          />
+        </div>
         <ImageUpload
           name='file'
           classes={{
@@ -90,6 +104,7 @@ const mapStateToProps = state => {
       firstName: data.firstName,
       lastName: data.lastName,
       displayName: data.displayName,
+      birthday: data.birthday,
     },
   };
 };

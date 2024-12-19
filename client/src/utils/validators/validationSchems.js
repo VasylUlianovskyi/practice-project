@@ -1,12 +1,10 @@
 import * as yup from 'yup';
 import valid from 'card-validator';
+import { subYears } from 'date-fns';
 
 export default {
   LoginSchem: yup.object().shape({
-    email: yup
-      .string()
-      .email('check email')
-      .required('required'),
+    email: yup.string().email('check email').required('required'),
     password: yup
       .string()
       .test(
@@ -17,10 +15,7 @@ export default {
       .required('required'),
   }),
   RegistrationSchem: yup.object().shape({
-    email: yup
-      .string()
-      .email('check email')
-      .required('Email is required'),
+    email: yup.string().email('check email').required('Email is required'),
     password: yup
       .string()
       .test(
@@ -57,6 +52,9 @@ export default {
         value => value && value.trim().length >= 1
       )
       .required('Display Name is required'),
+    birthday: yup
+      .date()
+      .max(subYears(new Date().setHours(0, 0, 0, 0), 18), 'User must be adult'),
     role: yup
       .string()
       .matches(/(customer|creator)/)
@@ -149,10 +147,7 @@ export default {
       .required('required'),
   }),
   CashoutSchema: yup.object().shape({
-    sum: yup
-      .number()
-      .min(5, 'min sum is 5$')
-      .required('required'),
+    sum: yup.number().min(5, 'min sum is 5$').required('required'),
     number: yup
       .string()
       .test(
@@ -161,10 +156,7 @@ export default {
         value => valid.number(value).isValid
       )
       .required('required'),
-    name: yup
-      .string()
-      .min(1)
-      .required('required'),
+    name: yup.string().min(1).required('required'),
     cvc: yup
       .string()
       .test('test-cvc', 'cvc is invalid', value => valid.cvv(value).isValid)
@@ -203,6 +195,9 @@ export default {
         value => value && value.trim().length >= 1
       )
       .required('required'),
+    birthday: yup
+      .date()
+      .max(subYears(new Date().setHours(0, 0, 0, 0), 18), 'User must be adult'),
     file: yup.mixed(),
   }),
   MessageSchema: yup.object({
